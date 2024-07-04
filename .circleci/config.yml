@@ -176,7 +176,8 @@ jobs:
           name: Pull dependent Docker Images
           command: |
             echo Pulling dependent Docker images for focal ...
-            docker compose pull docker-compose.circle2.yml
+            docker version
+            docker-compose pull docker-compose.circle2.yml
           # command: .circle/docker-compose2.sh pull ${DISTRO} || .circle/docker-compose2.sh pull ${DISTRO}   -f docker-compose.override.yml 
           working_directory: ~/st2-packages
       - run:
