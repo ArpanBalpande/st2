@@ -172,10 +172,10 @@ jobs:
             docker cp ~/st2-packages st2-packages-vol:/root
             # copy st2 source files into this volume
             docker cp . st2-packages-vol:${ST2_GITDIR}
-      # - run:
-      #     name: Pull dependent Docker Images
-      #     command: .circle/docker-compose2.sh pull ${DISTRO} || .circle/docker-compose2.sh pull ${DISTRO}
-      #     working_directory: ~/st2-packages
+      - run:
+          name: Pull dependent Docker Images
+          command: .circle/docker-compose2.sh pull ${DISTRO} || .circle/docker-compose2.sh pull ${DISTRO}
+          working_directory: ~/st2-packages
       - run:
           name: Build the ${DISTRO} Packages
           command: |
@@ -222,7 +222,7 @@ jobs:
       - image: circleci/ruby:2.4
     working_directory: /tmp/deploy
     environment:
-      - DISTROS: "bionic focal el7 el8"
+      - DISTROS: "focal el7 el8"
     steps:
       - attach_workspace:
           at: .
