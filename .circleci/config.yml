@@ -116,7 +116,7 @@ jobs:
       - image: circleci/python:3.6
     working_directory: ~/st2
     environment:
-      - DISTROS: "focal el7 el8"
+      - DISTROS: "bionic focal el7 el8"
       - ST2_PACKAGES_REPO: https://github.com/StackStorm/st2-packages
       - ST2_PACKAGES: "st2"
       - ST2_CHECKOUT: 0
@@ -140,12 +140,12 @@ jobs:
             set -x
             git clone ${ST2_PACKAGES_REPO} ~/st2-packages
             cd ~/st2-packages
-            git checkout ${CIRCLE_BRANCH} || true
+            git checkout v3.8 || true
       - run:
           name: Initialize packages Build Environment
           command: |
             set -x
-            export ST2_GITREV=${CIRCLE_BRANCH}
+            export ST2_GITREV=v3.8
             .circle/buildenv_st2.sh
           working_directory: ~/st2-packages
       # Verify that Docker environment is properly cleaned up and there is nothing left from the previous build
@@ -174,12 +174,7 @@ jobs:
             docker cp . st2-packages-vol:${ST2_GITDIR}
       - run:
           name: Pull dependent Docker Images
-          command: |
-            echo Pulling dependent Docker images for focal ...
-            docker version
-            docker-compose version
-            docker-compose -f docker-compose.circle2.yml -f docker-compose.override.yml pull --include-deps $2
-          # command: .circle/docker-compose2.sh pull ${DISTRO} || .circle/docker-compose2.sh pull ${DISTRO}   -f docker-compose.override.yml 
+          command: .circle/docker-compose2.sh pull ${DISTRO} || .circle/docker-compose2.sh pull ${DISTRO}
           working_directory: ~/st2-packages
       - run:
           name: Build the ${DISTRO} Packages
@@ -227,7 +222,7 @@ jobs:
       - image: circleci/ruby:2.4
     working_directory: /tmp/deploy
     environment:
-      - DISTROS: "focal el7 el8"
+      - DISTROS: "bionic focal el7 el8"
     steps:
       - attach_workspace:
           at: .
