@@ -127,7 +127,7 @@ jobs:
       - setup_remote_docker:
           reusable: true    # default - false
           exclusive: true   # default - true
-          version: 20.10.18
+          version: 24.0.6
       - run:
           name: Docker version
           command: |
